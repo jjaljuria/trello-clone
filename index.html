@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Drag and Drop</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1 class="title">Board</h1>
+		<section class="column">
+			<p class="new_task" onclick="newTask(event)">
+				Create Task
+			</p>
+		</section>
+		<section class="column">
+			<p class="new_task" onclick="newTask(event)">
+				Create Task
+			</p>
+		</section>
+		<section class="column">
+			<p class="new_task" onclick="newTask(event)">
+				Create Task
+			</p>
+		</section>
+		<section class="column">
+			<p class="new_task" onclick="newTask(event)">
+				Create Task
+			</p>
+		</section>
+		<section class="column">
+			<p class="new_task" onclick="newTask(event)">
+				Create Task
+			</p>
+		</section>
+
+	</div>
+
+	<template id="templateTask">
+		<div class="task" 
+		draggable="true"
+		ondragstart="dragTask(event)" 
+		ondragend="removeTaskDroped(event)"
+		ondragend="removeTaskDroped(event)" 
+		ontouchmove="dragTaskMobile(event)">
+			<header class="task__icon">
+				<button>e</button>
+				<button onclick="deleteTask(event)">x</button>
+			</header>
+
+			<section
+			class="task__body" 
+			onclick="edit(event)" 
+			onblur="save(event)"
+			>
+
+			</section>
+		</div>
+	</template>
+	<script src="main.js"></script>
+</body>
+
+</html>
