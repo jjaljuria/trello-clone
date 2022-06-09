@@ -8,8 +8,9 @@ document.querySelectorAll('.column').forEach(column => {
 	column.addEventListener('drop', event => {
 		if (event.dataTransfer.effectAllowed === 'move') {
 			const template = document.getElementById('templateTask').content.cloneNode(true);
-			const content = event.dataTransfer.getData('text/plain');
-			template.querySelector('.task__body').innerText = content;
+			const task = JSON.parse(event.dataTransfer.getData('text'));
+			template.querySelector('.task__title').innerText = task.title
+			template.querySelector('.task__body').innerText = task.body;
 			event.target.appendChild(template);
 		}
 	})
@@ -17,8 +18,14 @@ document.querySelectorAll('.column').forEach(column => {
 
 
 function dragTask(event) {
+	const task = {
+		title: event.target.querySelector('.task__title').innerText,
+		body: event.target.querySelector('.task__body').innerText,
+	}
+
+
 	event.dataTransfer.effectAllowed = 'move';
-	event.dataTransfer.setData('text', event.target.querySelector('.task__body').innerText);
+	event.dataTransfer.setData('text', JSON.stringify(task));
 }
 
 // remove task when task were droped exitily
@@ -43,5 +50,5 @@ function save(event) {
 }
 
 function deleteTask(event){
-	event.target.parentNode.parentNode.remove()
+	event.target.parentNode.parentNode.parentNode.remove()
 }

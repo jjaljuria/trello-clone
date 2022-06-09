@@ -42,11 +42,24 @@ html{
 	margin-right: 4px;
 }
 
+.task__header{
+	display: flex;
+	word-break: break-word;
+	padding:5px;
+	gap:2px
+}
+
+.task__title{
+	width: 100%;
+	outline: none;
+	word-wrap: break-word;
+	border: 1px solid red;
+}
+
 .task__icon{
 	display: flex;
-	justify-content: end;
-	gap:2px;
-	padding:5px;
+	gap: 2px;
+	align-items: start;
 }
 
 .task__body{

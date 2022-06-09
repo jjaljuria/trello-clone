@@ -46,9 +46,15 @@
 		ondragend="removeTaskDroped(event)"
 		ondragend="removeTaskDroped(event)" 
 		ontouchmove="dragTaskMobile(event)">
-			<header class="task__icon">
-				<button>e</button>
-				<button onclick="deleteTask(event)">x</button>
+			<header class="task__header">
+				<div class="task__title" 
+				onclick="edit(event)" 
+				onblur="save(event)">
+				</div>
+				<div class="task__icon">
+					<button>e</button>
+					<button onclick="deleteTask(event)">x</button>
+				</div>
 			</header>
 			<hr>
 			<section
