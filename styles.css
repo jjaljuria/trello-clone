@@ -33,21 +33,27 @@ html{
 	background-color: #ccc;
 	width: calc(100% - 1rem);
 	margin: 1rem auto;
-	border: 1px solid red;
+}
+
+.task hr{
+	border: 0;
+	border-top: 1px solid #777;
+	margin-left: 4px;
+	margin-right: 4px;
 }
 
 .task__icon{
 	display: flex;
 	justify-content: end;
 	gap:2px;
-	border: 1px solid red;
+	padding:5px;
 }
 
 .task__body{
 	min-height: 5rem;
 	word-wrap: break-word;
 	padding: 5px;
-	border:1px solid red;
+	outline:none;
 }
 
 .new_task{

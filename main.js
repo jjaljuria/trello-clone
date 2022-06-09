@@ -42,13 +42,6 @@ function save(event) {
 	event.target.contentEditable = false;
 }
 
-function dragTaskMobile(event) {
-	let touchLocation = event.targetTouches[0];
-	console.log(touchLocation);
-	event.target.style.left = touchLocation.pageX + 'px';
-	event.target.style.top = touchLocation.pageY + 'px';
-}
-
 function deleteTask(event){
 	event.target.parentNode.parentNode.remove()
 }
