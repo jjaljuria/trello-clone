@@ -6,9 +6,6 @@ function save(event) {
 	event.target.contentEditable = false;
 }
 
-function deleteTask(event) {
-	event.target.parentNode.parentNode.parentNode.remove()
-}
 
 function getRandomIntInclusive(min, max) {
 	min = Math.ceil(min);
@@ -22,6 +19,17 @@ class Column extends HTMLElement {
 	constructor() {
 		super();
 		this.render();
+		
+	}
+
+	render() {
+		this.innerHTML = `
+		<section class="column">
+			<p class="new_task" onclick="">
+				Create Task
+			</p>
+		</section>`;
+		
 		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
 		this.querySelectorAll('.column').forEach(column => {
 			column.addEventListener('dragover', event => {
@@ -32,23 +40,15 @@ class Column extends HTMLElement {
 
 			column.addEventListener('drop', event => {
 				if (event.dataTransfer.effectAllowed === 'move') {
-
 					const task = JSON.parse(event.dataTransfer.getData('text'));
 					this.#createTask(task);
 					this.tasks.push(task);
 				}
 			})
 		})
-	}
 
-	render() {
-		this.innerHTML = `
-		<section class="column">
-			<p class="new_task" onclick="">
-				Create Task
-			</p>
-		</section>`;
-
+		// setting tasks
+		this.tasks.forEach((task)=> this.#createTask(task))
 	}
 
 	newTask(event) {
@@ -59,6 +59,7 @@ class Column extends HTMLElement {
 	}
 
 	#createTask({ id , title, body }) {
+		console.log({id}, {title}, {body})
 		const templateTask = document.getElementById('templateTask').content.cloneNode(true); // clona template
 		
 		this.firstElementChild.appendChild(templateTask);// agrega a DOM
@@ -72,10 +73,17 @@ class Column extends HTMLElement {
 		// agrega eventos
 		newElementTask.addEventListener('dragstart', this.dragTask.bind(this));
 		newElementTask.addEventListener('dragend',this.removeTaskDroped.bind(this));
+		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this,id));
 
 		return newElementTask;
 
 	}
+
+	#deleteTask(id) {
+		this.tasks = this.tasks.filter(task => task.id !== id);
+		this.render();
+	}
+	
 
 	dragTask(event) {
 		const task = {
@@ -94,7 +102,6 @@ class Column extends HTMLElement {
 	if (event.dataTransfer.dropEffect !== 'none') {
 		this.tasks = this.tasks.filter((task) => task.id !== event.target.dataset.id);
 		event.target.remove();
-		console.log(this.tasks)
 	}
 }
 }
