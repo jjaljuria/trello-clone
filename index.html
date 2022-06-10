@@ -11,41 +11,20 @@
 <body>
 	<div class="container">
 		<h1 class="title">Board</h1>
-		<section class="column">
-			<p class="new_task" onclick="newTask(event)">
-				Create Task
-			</p>
-		</section>
-		<section class="column">
-			<p class="new_task" onclick="newTask(event)">
-				Create Task
-			</p>
-		</section>
-		<section class="column">
-			<p class="new_task" onclick="newTask(event)">
-				Create Task
-			</p>
-		</section>
-		<section class="column">
-			<p class="new_task" onclick="newTask(event)">
-				Create Task
-			</p>
-		</section>
-		<section class="column">
-			<p class="new_task" onclick="newTask(event)">
-				Create Task
-			</p>
-		</section>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+		
 
 	</div>
 
 	<template id="templateTask">
 		<div class="task" 
 		draggable="true"
-		ondragstart="dragTask(event)" 
-		ondragend="removeTaskDroped(event)"
-		ondragend="removeTaskDroped(event)" 
-		ontouchmove="dragTaskMobile(event)">
+		data-id=""
+		>
 			<header class="task__header">
 				<div class="task__title" 
 				onclick="edit(event)" 
