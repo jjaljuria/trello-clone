@@ -2,11 +2,6 @@ function edit(event) {
 	event.target.contentEditable = true;
 }
 
-function save(event) {
-	event.target.contentEditable = false;
-}
-
-
 function getRandomIntInclusive(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
@@ -19,17 +14,19 @@ class Column extends HTMLElement {
 	constructor() {
 		super();
 		this.render();
-		
+
 	}
 
 	render() {
+
+		// el orden es importante
 		this.innerHTML = `
 		<section class="column">
 			<p class="new_task" onclick="">
 				Create Task
 			</p>
 		</section>`;
-		
+
 		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
 		this.querySelectorAll('.column').forEach(column => {
 			column.addEventListener('dragover', event => {
@@ -48,20 +45,20 @@ class Column extends HTMLElement {
 		})
 
 		// setting tasks
-		this.tasks.forEach((task)=> this.#createTask(task))
+		this.tasks.forEach((task) => this.#createTask(task))
 	}
 
 	newTask(event) {
-		const task = { title: '', body: '', id: getRandomIntInclusive(1,100000000)};
+		const task = { title: '', body: '', id: getRandomIntInclusive(1, 100000000) };
 		this.#createTask(task);
 		this.tasks.push(task);
 		console.log(this.tasks)
 	}
 
-	#createTask({ id , title, body }) {
-		console.log({id}, {title}, {body})
+	#createTask({ id, title, body }) {
+		console.log({ id }, { title }, { body })
 		const templateTask = document.getElementById('templateTask').content.cloneNode(true); // clona template
-		
+
 		this.firstElementChild.appendChild(templateTask);// agrega a DOM
 		const newElementTask = this.firstElementChild.lastElementChild
 
@@ -72,8 +69,10 @@ class Column extends HTMLElement {
 
 		// agrega eventos
 		newElementTask.addEventListener('dragstart', this.dragTask.bind(this));
-		newElementTask.addEventListener('dragend',this.removeTaskDroped.bind(this));
-		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this,id));
+		newElementTask.addEventListener('dragend', this.removeTaskDroped.bind(this));
+		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this, id));
+		newElementTask.querySelector('.task__title').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'title']));
+		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'body']));
 
 		return newElementTask;
 
@@ -83,7 +82,19 @@ class Column extends HTMLElement {
 		this.tasks = this.tasks.filter(task => task.id !== id);
 		this.render();
 	}
-	
+
+	#saveTextChange([id, text]) {
+		event.target.contentEditable = false;
+		const newText = event.target.innerText;
+
+		this.tasks.forEach(task => {
+			if (task.id === id) {
+				task[text] = newText;
+			}
+		})
+
+		console.log(this.tasks);
+	}
 
 	dragTask(event) {
 		const task = {
@@ -98,11 +109,11 @@ class Column extends HTMLElement {
 
 	// remove task when task were droped exitily
 	removeTaskDroped(event) {
-		
-	if (event.dataTransfer.dropEffect !== 'none') {
-		this.tasks = this.tasks.filter((task) => task.id !== event.target.dataset.id);
-		event.target.remove();
+
+		if (event.dataTransfer.dropEffect !== 'none') {
+			this.tasks = this.tasks.filter((task) => task.id !== event.target.dataset.id);
+			event.target.remove();
+		}
 	}
-}
 }
 customElements.define('task-column', Column);
