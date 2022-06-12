@@ -41,6 +41,7 @@ html{
 	background-color: var(--color-primary);
 	width: calc(100% - 1rem);
 	margin: 1rem auto;
+	word-break: break-word;
 }
 
 .task hr{
