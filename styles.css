@@ -9,13 +9,16 @@
 	--color-secondary:rgb(250,250,250, 0.6);
 	--font: Verdana, Geneva, Tahoma, sans-serif;
 	--text-color: #222;
-	--text-white: #ffffff;
 }
 
 html{
 	font-size: 16px;
 	font-family: var(--font);
 	color: var(--text-color);
+}
+
+body{
+	background: linear-gradient(to right, #c0392b, #8e44ad);
 }
 
 .container{
@@ -99,10 +102,6 @@ html{
 	border:1px solid red;
 	font-size: 2rem;
 	background: var(--color-secondary);
-}
-
-body{
-	background: linear-gradient(to right, #c0392b, #8e44ad);
 }
 
 @media (max-width: 360px){

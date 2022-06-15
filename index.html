@@ -9,40 +9,28 @@
 </head>
 
 <body>
-	<main class="container">
+	<div class="container">
 		<h1 class="title" contenteditable="true">Board Title...</h1>
 		<task-column></task-column>
 		<task-column></task-column>
 		<task-column></task-column>
 		<task-column></task-column>
 		<task-column></task-column>
-		
+	</d>
 
-	</main>
 
-	<footer>
-		<p>jjaljuria &copy; 2022</p>
-	</footer>
 
 	<template id="templateTask">
-		<div class="task" 
-		draggable="true"
-		data-id=""
-		>
+		<div class="task" draggable="true" data-id="">
 			<header class="task__header">
-				<div class="task__title" 
-				onclick="edit(event)" 
-				>
+				<div class="task__title" onclick="edit(event)">
 				</div>
 				<div class="task__icon">
 					<button class="task__icon-delete">x</button>
 				</div>
 			</header>
 			<hr>
-			<section
-			class="task__body" 
-			onclick="edit(event)" 
-			>
+			<section class="task__body" onclick="edit(event)">
 
 			</section>
 		</div>
