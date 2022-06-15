@@ -26,7 +26,7 @@ body{
 	max-height: 1200px;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
-	grid-template-rows: 2.5rem 80vh;
+	grid-template-rows: 3.5rem 80vh;
 	gap: 1rem;
 }
 
@@ -40,6 +40,21 @@ body{
 
 .title{
 	grid-column: 1/6;
+	padding:.3rem;
+	background: var(--color-secondary);
+	border-radius: 5px;
+}
+
+.title > input{
+	outline: none;
+	background: transparent;
+	font-size: 2rem;
+	border: 0;
+	width: 100%;
+}
+
+.title > input::placeholder{
+	color: var(--text-color);
 }
 
 .task{
@@ -96,12 +111,6 @@ body{
 .new_task:hover{
 	background-color:var(--color-secondary);
 	cursor: default;
-}
-
-.title{
-	border:1px solid red;
-	font-size: 2rem;
-	background: var(--color-secondary);
 }
 
 @media (max-width: 360px){
