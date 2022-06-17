@@ -11,8 +11,9 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "rules": {
-    },
+    "rules": {},
     "parser": "@babel/eslint-parser",
-    "plugins": ["prettier"]
+    "plugins": [
+        "prettier"
+    ]
 }

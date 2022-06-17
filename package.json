@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "build": "vite build && ./node_modules/.bin/babel dist/js --out-file dist/js/main.js",
+    "build": "vite build && ./node_modules/.bin/babel dist/js/* --out-file dist/js/main.js",
     "dev": "vite",
     "preview": "vite preview"
   },

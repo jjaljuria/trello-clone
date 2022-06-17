@@ -1,6 +1,4 @@
-function edit(event) {
-	event.target.contentEditable = true;
-}
+
 
 function getRandomIntInclusive(min, max) {
 	min = Math.ceil(min);
@@ -8,20 +6,22 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min).toString(); // The maximum is inclusive and the minimum is inclusive
 }
 
-class Data{
+
+
+class Data {
 	#data = new Map();
 
 	#dataStore = null;
 
-	constructor(dataStore){
+	constructor(dataStore) {
 		this.#dataStore = dataStore;
 	}
 
 	/**
 	 * @param {Iterable<readonly [any, any]>} data
 	 */
-	set data(data){
-		if(!Array.isArray(data))
+	set data(data) {
+		if (!Array.isArray(data))
 			return new Error('typeError: Data need array');
 
 		const newData = new Map();
@@ -30,24 +30,24 @@ class Data{
 		this.#data = newData;
 	}
 
-	add(task){
-		this.#data.set(task.id, { ...task});
+	add(task) {
+		this.#data.set(task.id, { ...task });
 	}
 
-	remove(id){
+	remove(id) {
 		return this.#data.delete(id);
 	}
 
-	find(id){
-		return { ...this.#data.get(id)};
+	find(id) {
+		return { ...this.#data.get(id) };
 	}
 
-	getAll(){
+	getAll() {
 		return Array.from(this.#data.values());
 	}
 
 	update(task) {
-		if(this.#data.has(task.id)){
+		if (this.#data.has(task.id)) {
 			this.#data.set(task.id, task);
 			return true;
 		}
@@ -55,49 +55,49 @@ class Data{
 		return false;
 	}
 
-	save(){
+	save() {
 		this.#dataStore.save();
 	}
 
 
 }
 
-class DataStore{
+class DataStore {
 	#data = [];
 
 	#store = null;
 
 	length = 0;
 
-	constructor(store){
+	constructor(store) {
 		this.#store = store;
 	}
 
-	attach(){
+	attach() {
 		const newData = new Data(this);
 		this.#data[this.length++] = newData;
 
 		return newData;
 	}
 
-	save(){
+	save() {
 
-		const data = this.#data.map((item)=> item.getAll());
+		const data = this.#data.map((item) => item.getAll());
 
 		this.#store.setItem('data', JSON.stringify(data));
 	}
 
-	populate(){
+	populate() {
 		const data = JSON.parse(this.#store.getItem('data'));
 
-		if(!Array.isArray(data))
+		if (!Array.isArray(data))
 			return;
-		
+
 		for (let i = 0; i < data.length; i++) {
 			for (let j = 0; j < data[i].length; j++) {
 				this.#data[i].add(data[i][j]);
 			}
-			
+
 		}
 
 	}
@@ -171,6 +171,8 @@ class Column extends HTMLElement {
 		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this, id));
 		newElementTask.querySelector('.task__title').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'title']));
 		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'body']));
+		newElementTask.querySelector('.task__title').addEventListener('click', editElement);
+		newElementTask.querySelector('.task__body').addEventListener('click', editElement);
 		return newElementTask;
 
 	}
@@ -184,7 +186,7 @@ class Column extends HTMLElement {
 	#saveTextChange([id, text]) {
 		event.target.contentEditable = false;
 		const newText = event.target.innerText;
-	
+
 		const task = this.tasks.find(id);
 		task[text] = newText;
 		this.tasks.update(task);
@@ -215,24 +217,27 @@ class Column extends HTMLElement {
 
 customElements.define('task-column', Column);
 
-window.addEventListener('DOMContentLoaded', ()=> {
+window.addEventListener('DOMContentLoaded', () => {
 	store.populate();
 	document.querySelectorAll('task-column').forEach(column => column.render());
 	document.querySelector('.title > input').value = getTitle();
 });
 
-function saveTitle(event){
+function saveTitle(event) {
 	const title = event.target.value;
-	if(!title)
+	if (!title)
 		return false;
-	
+
 	localStorage.setItem('title', JSON.stringify(title));
 }
 
-function getTitle(){
+function getTitle() {
 	const title = localStorage.getItem('title');
-	if(!title)
+	if (!title)
 		return '';
-	
+
 	return JSON.parse(title);
+}
+function editElement(event) {
+	event.target.contentEditable = true;
 }
