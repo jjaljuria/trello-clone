@@ -7,7 +7,6 @@ export default defineConfig({
 	publicDir: 'public',
 	build: {
 		outDir: '../dist',
-		minify: false,
 	},
 	plugins: [babel()]
 })

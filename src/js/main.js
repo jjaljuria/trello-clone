@@ -221,6 +221,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	store.populate();
 	document.querySelectorAll('task-column').forEach(column => column.render());
 	document.querySelector('.title > input').value = getTitle();
+	document.querySelector('.title > input').onblur = saveTitle;
 });
 
 function saveTitle(event) {
