@@ -5,11 +5,12 @@ function edit(event) {
 function getRandomIntInclusive(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1) + min).toString(); //The maximum is inclusive and the minimum is inclusive
+	return Math.floor(Math.random() * (max - min + 1) + min).toString(); // The maximum is inclusive and the minimum is inclusive
 }
 
 class Data{
 	#data = new Map();
+
 	#dataStore = null;
 
 	constructor(dataStore){
@@ -30,7 +31,7 @@ class Data{
 	}
 
 	add(task){
-		this.#data.set(task.id, Object.assign({}, task));
+		this.#data.set(task.id, { ...task});
 	}
 
 	remove(id){
@@ -38,7 +39,7 @@ class Data{
 	}
 
 	find(id){
-		return Object.assign({}, this.#data.get(id));
+		return { ...this.#data.get(id)};
 	}
 
 	getAll(){
@@ -63,7 +64,9 @@ class Data{
 
 class DataStore{
 	#data = [];
+
 	#store = null;
+
 	length = 0;
 
 	constructor(store){
@@ -85,7 +88,7 @@ class DataStore{
 	}
 
 	populate(){
-		let data = JSON.parse(this.#store.getItem('data'));
+		const data = JSON.parse(this.#store.getItem('data'));
 
 		if(!Array.isArray(data))
 			return;
@@ -100,7 +103,7 @@ class DataStore{
 	}
 }
 
-var store = new DataStore(localStorage);
+const store = new DataStore(localStorage);
 
 class Column extends HTMLElement {
 	tasks = null;
