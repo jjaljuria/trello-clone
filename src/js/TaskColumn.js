@@ -1,7 +1,8 @@
-import {store} from './store'
+import { store } from './store'
 
 function editElement(event) {
-	event.target.contentEditable = true;
+	const element = event.target;
+	element.contentEditable = true;
 }
 
 function getRandomIntInclusive(min, max) {
@@ -71,11 +72,11 @@ class Column extends HTMLElement {
 		newElementTask.querySelector('.task__body').innerText = body;
 
 		// agrega eventos
-		newElementTask.addEventListener('dragstart', this.dragTask.bind(this));
+		newElementTask.addEventListener('dragstart', this.dragTask);
 		newElementTask.addEventListener('dragend', this.removeTaskDroped.bind(this));
 		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this, id));
-		newElementTask.querySelector('.task__title').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'title']));
-		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, [id, 'body']));
+		newElementTask.querySelector('.task__title').addEventListener('blur', this.#saveTextChange.bind(this, { id, text: 'title' }));
+		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, { id, text: 'body' }));
 		newElementTask.querySelector('.task__title').addEventListener('click', editElement);
 		newElementTask.querySelector('.task__body').addEventListener('click', editElement);
 		return newElementTask;
@@ -88,9 +89,10 @@ class Column extends HTMLElement {
 		this.render();
 	}
 
-	#saveTextChange([id, text]) {
-		event.target.contentEditable = false;
-		const newText = event.target.innerText;
+	#saveTextChange(event, { id, text }) {
+		const element = event.target;
+		element.contentEditable = false;
+		const newText = element.innerText;
 
 		const task = this.tasks.find(id);
 		task[text] = newText;
@@ -99,14 +101,17 @@ class Column extends HTMLElement {
 	}
 
 	dragTask(event) {
+
+		const { dataTransfer } = event;
+
 		const task = {
-			id: event.target.dataset.id,
-			title: event.target.querySelector('.task__title').innerText,
-			body: event.target.querySelector('.task__body').innerText,
+			id: this.dataset.id,
+			title: this.querySelector('.task__title').innerText,
+			body: this.querySelector('.task__body').innerText,
 		}
 
-		event.dataTransfer.effectAllowed = 'move';
-		event.dataTransfer.setData('text', JSON.stringify(task));
+		dataTransfer.effectAllowed = 'move';
+		dataTransfer.setData('text', JSON.stringify(task));
 	}
 
 	// remove task when task were droped exitily
