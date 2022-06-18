@@ -1,27 +1,27 @@
-*{
+* {
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
 }
 
-:root{
+:root {
 	--color-primary: rgba(255, 255, 255, 0.8);
-	--color-secondary:rgb(250,250,250, 0.6);
+	--color-secondary: rgb(250, 250, 250, 0.6);
 	--font: Verdana, Geneva, Tahoma, sans-serif;
 	--text-color: #222;
 }
 
-html{
+html {
 	font-size: 16px;
 	font-family: var(--font);
 	color: var(--text-color);
 }
 
-body{
+body {
 	background: linear-gradient(to right, #c0392b, #8e44ad);
 }
 
-.container{
+.container {
 	margin: 1rem;
 	max-height: 1200px;
 	display: grid;
@@ -30,22 +30,22 @@ body{
 	gap: 1rem;
 }
 
-.column{
-	background: rgb(250,250,250, 0.6);
+.column {
+	background: rgb(250, 250, 250, 0.6);
 	border-radius: 5px;
-	overflow-y:auto;
+	overflow-y: auto;
 	height: 100%;
 	width: 100%;
 }
 
-.title{
+.title {
 	grid-column: 1/6;
-	padding:.3rem;
+	padding: .3rem;
 	background: var(--color-secondary);
 	border-radius: 5px;
 }
 
-.title > input{
+.title>input {
 	outline: none;
 	background: transparent;
 	font-size: 2rem;
@@ -53,11 +53,11 @@ body{
 	width: 100%;
 }
 
-.title > input::placeholder{
+.title>input::placeholder {
 	color: var(--text-color);
 }
 
-.task{
+.task {
 	display: block;
 	background-color: var(--color-primary);
 	width: calc(100% - 1rem);
@@ -65,40 +65,40 @@ body{
 	word-break: break-word;
 }
 
-.task hr{
+.task hr {
 	border: 0;
 	border-top: 1px solid #777;
 	margin-left: 4px;
 	margin-right: 4px;
 }
 
-.task__header{
+.task__header {
 	display: flex;
 	word-break: break-word;
-	padding:5px;
-	gap:2px
+	padding: 5px;
+	gap: 2px
 }
 
-.task__title{
+.task__title {
 	width: 100%;
 	outline: none;
 	word-wrap: break-word;
 }
 
-.task__icon{
+.task__icon {
 	display: flex;
 	gap: 2px;
 	align-items: start;
 }
 
-.task__body{
+.task__body {
 	min-height: 5rem;
 	word-wrap: break-word;
 	padding: 5px;
-	outline:none;
+	outline: none;
 }
 
-.new_task{
+.new_task {
 	background-color: var(--color-primary);
 	padding: 1rem;
 	margin: 0.3rem;
@@ -108,21 +108,21 @@ body{
 	user-select: none;
 }
 
-.new_task:hover{
-	background-color:var(--color-secondary);
+.new_task:hover {
+	background-color: var(--color-secondary);
 	cursor: default;
 }
 
-@media (max-width: 360px){
-	html{
+@media (max-width: 360px) {
+	html {
 		font-size: 13px;
 	}
 
-	.container{
-		grid-template-rows: 2rem repeat(5,80vh);
+	.container {
+		grid-template-rows: 2rem repeat(5, 80vh);
 	}
 
-	.column{
+	.column {
 		grid-column: 1/6;
 	}
 }
