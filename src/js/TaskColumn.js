@@ -89,7 +89,8 @@ class Column extends HTMLElement {
 		this.render();
 	}
 
-	#saveTextChange(event, { id, text }) {
+	#saveTextChange({ id, text }, event) {
+
 		const element = event.target;
 		element.contentEditable = false;
 		const newText = element.innerText;
