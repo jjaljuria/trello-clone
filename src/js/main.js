@@ -1,5 +1,6 @@
-import {store} from './store'
-import './TaskColumn'
+import { store } from './store'
+import './Components/TaskColumn'
+import './Components/Separator'
 
 function saveTitle(event) {
 	const title = event.target.value;

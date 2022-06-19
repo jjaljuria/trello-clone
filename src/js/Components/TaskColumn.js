@@ -1,4 +1,4 @@
-import { store } from './store'
+import { store } from '../store'
 
 function editElement(event) {
 	const element = event.target;
@@ -28,6 +28,7 @@ class Column extends HTMLElement {
 			<p class="new_task" onclick="">
 				Create Task
 			</p>
+			<task-separator>
 		</section>`;
 
 		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
@@ -44,6 +45,7 @@ class Column extends HTMLElement {
 					this.#createTask(task);
 					this.tasks.add(task);
 					this.tasks.save();
+					this.render();
 				}
 			})
 		})
@@ -64,9 +66,9 @@ class Column extends HTMLElement {
 		const templateTask = document.getElementById('templateTask').content.cloneNode(true); // clona template
 
 		this.firstElementChild.appendChild(templateTask);// agrega a DOM
-		const newElementTask = this.firstElementChild.lastElementChild
-
+		const newElementTask = this.firstElementChild.lastElementChild;
 		// setting
+
 		newElementTask.dataset.id = id;
 		newElementTask.querySelector('.task__title').innerText = title
 		newElementTask.querySelector('.task__body').innerText = body;
@@ -79,6 +81,7 @@ class Column extends HTMLElement {
 		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, { id, text: 'body' }));
 		newElementTask.querySelector('.task__title').addEventListener('click', editElement);
 		newElementTask.querySelector('.task__body').addEventListener('click', editElement);
+
 		return newElementTask;
 
 	}
