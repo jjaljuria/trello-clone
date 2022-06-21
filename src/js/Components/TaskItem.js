@@ -4,6 +4,11 @@ function editElement(event) {
 }
 
 export default class TaskItem extends HTMLElement {
+
+	#body = '';
+
+	#title = '';
+
 	constructor(props) {
 		super(props);
 
@@ -11,20 +16,12 @@ export default class TaskItem extends HTMLElement {
 
 		this.render();
 
-
-
 		// handlers
 		this.titleElem.addEventListener('click', editElement)
 		this.titleElem.addEventListener('blur', (event) => this.saveText(event, 'title'));
 		this.bodyElem.addEventListener('blur', (event) => this.saveText(event, 'body'));
 		this.bodyElem.addEventListener('click', editElement);
 		this.deleteButton.addEventListener('click', this.deleteTask.bind(this));
-	}
-
-	connectedCallback() {
-		this.title = this.getAttribute('title');
-		this.body = this.getAttribute('body');
-		this.id = this.getAttribute('id');
 	}
 
 	deleteTask() {
@@ -47,8 +44,28 @@ export default class TaskItem extends HTMLElement {
 			composed: true
 		});
 
+
+		this.setAttribute(attr, event.target.innerText);
 		event.target.contentEditable = false;
 		this.dispatchEvent(newEvent);
+	}
+
+	set body(value) {
+		this.#body = value;
+		this.setAttribute('body', value);
+	}
+
+	get body() {
+		return this.#body;
+	}
+
+	set title(value) {
+		this.#title = value;
+		this.setAttribute('title', value);
+	}
+
+	get title() {
+		return this.#title;
 	}
 
 	static get observedAttributes() {
@@ -56,7 +73,7 @@ export default class TaskItem extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		console.log({ name })
+		console.log({ name }, { newValue })
 		switch (name) {
 			case 'title':
 				this.titleElem.innerText = newValue || '';
