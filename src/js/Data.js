@@ -1,5 +1,5 @@
 export default class Data {
-	#data = new Map();
+	#data = [];
 
 	#dataStore = null;
 
@@ -14,18 +14,24 @@ export default class Data {
 		if (!Array.isArray(data))
 			throw new Error('typeError: Data need array');
 
-		const newData = new Map();
-		data.forEach(task => newData.set(task.id, task));
+		const newData = [];
+		data.forEach(task => newData.push(task));
 
 		this.#data = newData;
 	}
 
 	add(task) {
-		this.#data.set(task.id, { ...task });
+		this.#data.push({ ...task });
 	}
 
 	remove(id) {
-		return this.#data.delete(id);
+		const taskRemoved = this.#data.find(task => task.id === id);
+		if (!taskRemoved)
+			return -1;
+
+		this.#data = this.#data.filter(task => task.id === id);
+
+		return taskRemoved;
 	}
 
 	find(id) {
