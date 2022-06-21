@@ -5,9 +5,9 @@ function editElement(event) {
 
 export default class TaskItem extends HTMLElement {
 
-	#body = '';
+	#body = 'adfs';
 
-	#title = '';
+	#title = 'dsfgds';
 
 	constructor(props) {
 		super(props);
@@ -41,7 +41,7 @@ export default class TaskItem extends HTMLElement {
 				attr,
 				text: event.target.innerText
 			},
-			composed: true
+			composed: true,
 		});
 
 
@@ -73,7 +73,7 @@ export default class TaskItem extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		console.log({ name }, { newValue })
+
 		switch (name) {
 			case 'title':
 				this.titleElem.innerText = newValue || '';
@@ -92,7 +92,7 @@ export default class TaskItem extends HTMLElement {
 	render() {
 		this.shadowRoot.innerHTML = `
 			${this.#styles()}
-			<div class="task" draggable="true" data-id="${this.id}">
+			<div class="task" draggable="true" data-id="${this.dataset.id}">
 			<header class="task__header">
 				<div class="task__title">
 				</div>

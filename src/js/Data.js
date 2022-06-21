@@ -29,6 +29,9 @@ export default class Data {
 	}
 
 	find(id) {
+		if (!id)
+			return null;
+
 		return { ...this.#data.get(id) };
 	}
 

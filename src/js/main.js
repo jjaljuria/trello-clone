@@ -1,6 +1,7 @@
 import { store } from './store'
 import './Components/TaskColumn'
 import './Components/Separator'
+import './Components/TaskItem'
 
 function saveTitle(event) {
 	const title = event.target.value;

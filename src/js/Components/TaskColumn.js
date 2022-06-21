@@ -1,9 +1,6 @@
 import { store } from '../store'
-
-function editElement(event) {
-	const element = event.target;
-	element.contentEditable = true;
-}
+import TaskItem from './TaskItem'
+import Separator from './Separator'
 
 function getRandomIntInclusive(min, max) {
 	const minValue = Math.ceil(min);
@@ -20,69 +17,52 @@ class Column extends HTMLElement {
 		this.render();
 	}
 
-	render() {
-
-		// el orden es importante
-		this.innerHTML = `
-		<section class="column">
-			<p class="new_task" onclick="">
-				Create Task
-			</p>
-			<task-separator>
-		</section>`;
-
-		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
-		this.querySelectorAll('.column').forEach(column => {
-			column.addEventListener('dragover', event => {
-				if (event.target.classList.contains('column')) {
-					event.preventDefault();
-				}
-			})// evita que se suelte sobre una task
-
-			column.addEventListener('drop', event => {
-				if (event.dataTransfer.effectAllowed === 'move') {
-					const task = JSON.parse(event.dataTransfer.getData('text'));
-					this.#createTask(task);
-					this.tasks.add(task);
-					this.tasks.save();
-					this.render();
-				}
-			})
-		})
-
-		// setting tasks
-
-		this.tasks.getAll().forEach((task) => this.#createTask(task));
-	}
-
 	newTask() {
 		const task = { title: '', body: '', id: getRandomIntInclusive(1, 100000000) };
-		this.#createTask(task);
+		const container = this.querySelector('.task__container');
+		const el = this.#createTask(task);
+		const separator = this.#addSeparator();
+
+		container.appendChild(el);
+		container.appendChild(separator)
 		this.tasks.add(task);
 		this.tasks.save();
 	}
 
 	#createTask({ id, title, body }) {
-		const templateTask = document.getElementById('templateTask').content.cloneNode(true); // clona template
 
-		this.firstElementChild.appendChild(templateTask);// agrega a DOM
-		const newElementTask = this.firstElementChild.lastElementChild;
-		// setting
-
-		newElementTask.dataset.id = id;
-		newElementTask.querySelector('.task__title').innerText = title
-		newElementTask.querySelector('.task__body').innerText = body;
+		const newElementTask = document.createElement('task-item', { is: TaskItem });
+		newElementTask.setAttribute('id', id);
+		newElementTask.title = title;
+		newElementTask.body = body;
 
 		// agrega eventos
 		newElementTask.addEventListener('dragstart', this.dragTask);
 		newElementTask.addEventListener('dragend', this.removeTaskDroped.bind(this));
-		newElementTask.querySelector('.task__icon-delete').addEventListener('click', this.#deleteTask.bind(this, id));
-		newElementTask.querySelector('.task__title').addEventListener('blur', this.#saveTextChange.bind(this, { id, text: 'title' }));
-		newElementTask.querySelector('.task__body').addEventListener('blur', this.#saveTextChange.bind(this, { id, text: 'body' }));
-		newElementTask.querySelector('.task__title').addEventListener('click', editElement);
-		newElementTask.querySelector('.task__body').addEventListener('click', editElement);
+		newElementTask.addEventListener('textChange', this.#saveTextChange.bind(this));
+		newElementTask.addEventListener('deleteTask', this.#deleteTask.bind(this, id));
 
 		return newElementTask;
+	}
+
+	#addSeparator() {
+		const separator = document.createElement('task-separator');
+
+		separator.addEventListener('dropTask', (event) => {
+			event.stopPropagation();
+			console.log(event)
+			const { task } = event.detail;
+			console.log('drop separator', { task }, event.bubbles, event.cancelBubble)
+			const taskElement = this.#createTask(task);
+			const separatorTask = this.#addSeparator();
+
+			event.target.insertAdjacentElement('afterend', taskElement);
+			taskElement.insertAdjacentElement('afterend', separatorTask);
+			this.tasks.add(task);
+			this.tasks.save();
+		});
+
+		return separator;
 
 	}
 
@@ -92,26 +72,22 @@ class Column extends HTMLElement {
 		this.render();
 	}
 
-	#saveTextChange({ id, text }, event) {
-
-		const element = event.target;
-		element.contentEditable = false;
-		const newText = element.innerText;
-
+	#saveTextChange(event) {
+		const { id, text, attr } = event.detail
 		const task = this.tasks.find(id);
-		task[text] = newText;
+		task[attr] = text;
 		this.tasks.update(task);
 		this.tasks.save();
 	}
 
 	dragTask(event) {
 
-		const { dataTransfer } = event;
+		const { dataTransfer, target } = event;
 
 		const task = {
 			id: this.dataset.id,
-			title: this.querySelector('.task__title').innerText,
-			body: this.querySelector('.task__body').innerText,
+			title: target.title,
+			body: target.body,
 		}
 
 		dataTransfer.effectAllowed = 'move';
@@ -123,9 +99,57 @@ class Column extends HTMLElement {
 
 		if (event.dataTransfer.dropEffect !== 'none') {
 			this.tasks.remove(event.target.dataset.id);
-			event.target.remove();
 			this.tasks.save();
+			this.render();
 		}
+	}
+
+	render() {
+
+		// el orden es importante
+		this.innerHTML = `
+		<section class="column">
+			<p class="new_task">
+				Create Task
+			</p>
+			<div class="task__container">
+			</div>
+		</section>`;
+
+		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
+		this.querySelectorAll('.task__container').forEach(column => {
+			column.addEventListener('dragover', event => {
+
+				if (event.target.classList.contains('task__container')) {
+					event.preventDefault();
+				}
+			})// evita que se suelte sobre una task
+
+			column.addEventListener('drop', event => {
+				if (event.dataTransfer.effectAllowed === 'move') {
+					const task = JSON.parse(event.dataTransfer.getData('text'));
+					console.log(event)
+					console.log('drop container', { task }, event.bubbles, event.cancelBubble)
+					const taskElement = this.#createTask(task, column);
+					const separator = this.#addSeparator();
+					column.appendChild(taskElement);
+					column.appendChild(separator);
+
+					this.tasks.add(task);
+					this.tasks.save();
+				}
+			})
+
+		})
+
+		this.tasks.getAll().forEach((task) => {
+			const container = this.querySelector('.task__container');
+			const taskElement = this.#createTask(task);
+			const separator = this.#addSeparator(container);
+			container.appendChild(taskElement);
+			container.appendChild(separator);
+		});
+
 	}
 }
 
