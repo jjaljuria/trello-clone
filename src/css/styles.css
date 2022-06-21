@@ -36,6 +36,8 @@ body {
 	overflow-y: auto;
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .title {
@@ -57,46 +59,12 @@ body {
 	color: var(--text-color);
 }
 
-.task {
-	display: block;
-	background-color: var(--color-primary);
-	width: calc(100% - 1rem);
-	margin: auto;
-	word-break: break-word;
+.task__container {
+	border: 1px solid red;
+	height: 100%;
+	overflow-y: auto;
 }
 
-.task hr {
-	border: 0;
-	border-top: 1px solid #777;
-	margin-left: 4px;
-	margin-right: 4px;
-}
-
-.task__header {
-	display: flex;
-	word-break: break-word;
-	padding: 5px;
-	gap: 2px
-}
-
-.task__title {
-	width: 100%;
-	outline: none;
-	word-wrap: break-word;
-}
-
-.task__icon {
-	display: flex;
-	gap: 2px;
-	align-items: start;
-}
-
-.task__body {
-	min-height: 5rem;
-	word-wrap: break-word;
-	padding: 5px;
-	outline: none;
-}
 
 .new_task {
 	background-color: var(--color-primary);
@@ -111,18 +79,6 @@ body {
 .new_task:hover {
 	background-color: var(--color-secondary);
 	cursor: default;
-}
-
-.separator {
-	border: 1px solid red;
-	padding: 1rem;
-}
-
-.space {
-	width: 100%;
-	height: 7rem;
-	padding: 0;
-	margin: 0;
 }
 
 @media (max-width: 360px) {
