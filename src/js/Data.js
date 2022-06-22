@@ -46,8 +46,9 @@ export default class Data {
 	}
 
 	update(task) {
-		if (this.#data.has(task.id)) {
-			this.#data.set(task.id, task);
+		const taskIndex = this.#data.findIndex(item => item.id === task.id);
+		if (taskIndex !== -1) {
+			this.#data[taskIndex] = task;
 			return true;
 		}
 
