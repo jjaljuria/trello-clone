@@ -25,20 +25,20 @@ export default class Data {
 	}
 
 	remove(id) {
-		const taskRemoved = this.#data.find(task => task.id === id);
-		if (!taskRemoved)
-			return -1;
+		const taskWillRemove = this.#data.findIndex(task => task.id === id);
+		if (taskWillRemove === -1) {
+			return false;
+		}
 
-		this.#data = this.#data.filter(task => task.id === id);
-
-		return taskRemoved;
+		this.#data.splice(taskWillRemove, 1);
+		return true;
 	}
 
 	find(id) {
 		if (!id)
 			return null;
 
-		return { ...this.#data.get(id) };
+		return this.#data.find(task => task.id === id);
 	}
 
 	getAll() {
