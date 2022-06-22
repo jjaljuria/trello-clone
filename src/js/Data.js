@@ -42,7 +42,7 @@ export default class Data {
 	}
 
 	getAll() {
-		return Array.from(this.#data.values());
+		return [...this.#data];
 	}
 
 	update(task) {
