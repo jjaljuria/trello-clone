@@ -24,16 +24,6 @@ export default class Data {
 		this.#data.push({ ...task });
 	}
 
-	remove(id) {
-		const taskWillRemove = this.#data.findIndex(task => task.id === id);
-		if (taskWillRemove === -1) {
-			return false;
-		}
-
-		this.#data.splice(taskWillRemove, 1);
-		return true;
-	}
-
 	find(id) {
 		if (!id)
 			return null;
@@ -43,6 +33,42 @@ export default class Data {
 
 	getAll() {
 		return [...this.#data];
+	}
+
+	/**
+	 * 
+	 * @param {string} id id of the task have find
+	 * @return number position index of tasks or -1 if not find
+	 */
+	indexOf(id) {
+		return this.#data.findIndex(task => task.id === id);
+	}
+
+	/**
+	 * @param {number} index index of task before insert new task
+	 * @param {task} task task for insert
+	 * @return true if element was inserted false otherway
+	 */
+	insert(id, task) {
+		try {
+
+			this.#data.splice(id, 0, task);
+		} catch (err) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	remove(id) {
+		const taskWillRemove = this.#data.findIndex(task => task.id === id);
+		if (taskWillRemove === -1) {
+			return false;
+		}
+
+		this.#data.splice(taskWillRemove, 1);
+		return true;
 	}
 
 	update(task) {
