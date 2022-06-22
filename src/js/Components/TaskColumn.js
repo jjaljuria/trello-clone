@@ -50,15 +50,26 @@ class Column extends HTMLElement {
 
 		separator.addEventListener('dropTask', (event) => {
 			event.stopPropagation();
-			console.log(event)
 			const { task } = event.detail;
-			console.log('drop separator', { task }, event.bubbles, event.cancelBubble)
+
 			const taskElement = this.#createTask(task);
 			const separatorTask = this.#addSeparator();
 
 			event.target.insertAdjacentElement('afterend', taskElement);
 			taskElement.insertAdjacentElement('afterend', separatorTask);
-			this.tasks.add(task);
+			const previousIdTask = event.target.previousElementSibling.id;
+			if (!previousIdTask) {
+				this.tasks.add(task);
+			}
+
+			const indexOfPreviousTask = this.tasks.indexOf(previousIdTask);
+
+			if (indexOfPreviousTask === -1) {
+				throw new Error('task not found')
+			}
+
+			this.tasks.insert(indexOfPreviousTask + 1, task);
+
 			this.tasks.save();
 		});
 

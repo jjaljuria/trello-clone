@@ -49,10 +49,10 @@ export default class Data {
 	 * @param {task} task task for insert
 	 * @return true if element was inserted false otherway
 	 */
-	insert(id, task) {
+	insert(index, task) {
 		try {
 
-			this.#data.splice(id, 0, task);
+			this.#data.splice(index, 0, task);
 		} catch (err) {
 
 			return false;
