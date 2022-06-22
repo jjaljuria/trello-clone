@@ -45,7 +45,7 @@ export default class TaskItem extends HTMLElement {
 		});
 
 
-		this.setAttribute(attr, event.target.innerText);
+		this[attr] = event.target.innerText;
 		event.target.contentEditable = false;
 		this.dispatchEvent(newEvent);
 	}
@@ -73,7 +73,8 @@ export default class TaskItem extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-
+		console.log({ name }, { newValue })
+		console.log(this.#title);
 		switch (name) {
 			case 'title':
 				this.titleElem.innerText = newValue || '';
