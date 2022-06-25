@@ -9,7 +9,6 @@ function getRandomIntInclusive(min, max) {
 }
 
 class Column extends HTMLElement {
-	tasks = null;
 
 	constructor() {
 		super();
@@ -37,7 +36,7 @@ class Column extends HTMLElement {
 		newElementTask.body = body;
 
 		// agrega eventos
-		newElementTask.addEventListener('dragstart', this.dragTask);
+		newElementTask.addEventListener('dragstart', this.dragTask.bind(this));
 		newElementTask.addEventListener('dragend', this.removeTaskDroped.bind(this));
 		newElementTask.addEventListener('textChange', this.#saveTextChange.bind(this));
 		newElementTask.addEventListener('deleteTask', this.#deleteTask.bind(this, id));
@@ -51,10 +50,8 @@ class Column extends HTMLElement {
 		separator.addEventListener('dropTask', (event) => {
 			event.stopPropagation();
 			const { task } = event.detail;
-
 			const taskElement = this.#createTask(task);
 			const separatorTask = this.#addSeparator();
-
 			event.target.insertAdjacentElement('afterend', taskElement);
 			taskElement.insertAdjacentElement('afterend', separatorTask);
 			const previousIdTask = event.target.previousElementSibling.id;
@@ -96,20 +93,23 @@ class Column extends HTMLElement {
 		const { dataTransfer, target } = event;
 
 		const task = {
-			id: this.dataset.id,
+			id: target.dataset.id,
 			title: target.title,
 			body: target.body,
 		}
 
 		dataTransfer.effectAllowed = 'move';
 		dataTransfer.setData('text', JSON.stringify(task));
+
+		task.deleted = true;
+		this.tasks.update(task);
 	}
 
 	// remove task when task were droped exitily
 	removeTaskDroped(event) {
 
 		if (event.dataTransfer.dropEffect !== 'none') {
-			this.tasks.remove(event.target.dataset.id);
+			this.tasks.removeDeleted();
 			this.tasks.save();
 			this.render();
 		}
@@ -139,8 +139,7 @@ class Column extends HTMLElement {
 			column.addEventListener('drop', event => {
 				if (event.dataTransfer.effectAllowed === 'move') {
 					const task = JSON.parse(event.dataTransfer.getData('text'));
-					console.log(event)
-					console.log('drop container', { task }, event.bubbles, event.cancelBubble)
+
 					const taskElement = this.#createTask(task, column);
 					const separator = this.#addSeparator();
 					column.appendChild(taskElement);
@@ -153,12 +152,15 @@ class Column extends HTMLElement {
 
 		})
 
-		this.tasks.getAll().forEach((task) => {
+
+		this.tasks.getAll().forEach((task, index) => {
+
 			const container = this.querySelector('.task__container');
 			const taskElement = this.#createTask(task);
 			const separator = this.#addSeparator(container);
 			container.appendChild(taskElement);
 			container.appendChild(separator);
+
 		});
 
 	}

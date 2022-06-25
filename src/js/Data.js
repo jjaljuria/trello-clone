@@ -71,6 +71,10 @@ export default class Data {
 		return true;
 	}
 
+	removeDeleted() {
+		this.#data = this.#data.filter(item => !item.deleted);
+	}
+
 	update(task) {
 		const taskIndex = this.#data.findIndex(item => item.id === task.id);
 		if (taskIndex !== -1) {
