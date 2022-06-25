@@ -73,8 +73,7 @@ export default class TaskItem extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		console.log({ name }, { newValue })
-		console.log(this.#title);
+
 		switch (name) {
 			case 'title':
 				this.titleElem.innerText = newValue || '';

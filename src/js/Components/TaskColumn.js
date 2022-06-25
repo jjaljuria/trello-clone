@@ -22,9 +22,10 @@ class Column extends HTMLElement {
 		const el = this.#createTask(task);
 		const separator = this.#addSeparator();
 
-		container.appendChild(el);
-		container.appendChild(separator)
-		this.tasks.add(task);
+
+		container.prepend(el);
+		el.after(separator)
+		this.tasks.insert(0, task);
 		this.tasks.save();
 	}
 
