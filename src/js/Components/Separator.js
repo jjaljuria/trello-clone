@@ -47,12 +47,11 @@ export default class Separator extends HTMLElement {
 			<style>
 			.separator {
 				box-sizing: border-box;
-				border: 1px solid red;
 				padding: 1rem;
 			}
 			.space {
 				width: 100%;
-				height: 7rem;
+				height: 8rem;
 			}
 
 			</style>
