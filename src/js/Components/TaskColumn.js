@@ -1,6 +1,5 @@
 import { store } from '../store'
 import TaskItem from './TaskItem'
-import Separator from './Separator'
 
 function getRandomIntInclusive(min, max) {
 	const minValue = Math.ceil(min);
@@ -153,7 +152,7 @@ class Column extends HTMLElement {
 		})
 
 
-		this.tasks.getAll().forEach((task, index) => {
+		this.tasks.getAll().forEach(task => {
 
 			const container = this.querySelector('.task__container');
 			const taskElement = this.#createTask(task);
