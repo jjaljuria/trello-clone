@@ -18,12 +18,13 @@ class Column extends HTMLElement {
 
 	newTask() {
 		const task = { title: '', body: '', id: getRandomIntInclusive(1, 100000000) };
-		const container = this.querySelector('.task__container');
+		const container = this.querySelector('.task__container task-separator');
+
 		const el = this.#createTask(task);
 		const separator = this.#addSeparator();
 
 
-		container.prepend(el);
+		container.insertAdjacentElement('afterend', el);
 		el.after(separator)
 		this.tasks.insert(0, task);
 		this.tasks.save();
@@ -55,18 +56,13 @@ class Column extends HTMLElement {
 			const separatorTask = this.#addSeparator();
 			event.target.insertAdjacentElement('afterend', taskElement);
 			taskElement.insertAdjacentElement('afterend', separatorTask);
-			const previousIdTask = event.target.previousElementSibling.id;
+			const previousIdTask = event.target.previousElementSibling?.id;
 			if (!previousIdTask) {
-				this.tasks.add(task);
+				this.tasks.insert(0, task)
+			} else {
+				const indexOfPreviousTask = this.tasks.indexOf(previousIdTask);
+				this.tasks.insert(indexOfPreviousTask + 1, task);
 			}
-
-			const indexOfPreviousTask = this.tasks.indexOf(previousIdTask);
-
-			if (indexOfPreviousTask === -1) {
-				throw new Error('task not found')
-			}
-
-			this.tasks.insert(indexOfPreviousTask + 1, task);
 
 			this.tasks.save();
 		});
@@ -129,7 +125,10 @@ class Column extends HTMLElement {
 		</section>`;
 
 		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
-		this.querySelectorAll('.task__container').forEach(column => {
+		const taskContainer = this.querySelectorAll('.task__container');
+		taskContainer.forEach(column => {
+			column.appendChild(this.#addSeparator());
+
 			column.addEventListener('dragover', event => {
 
 				if (event.target.classList.contains('task__container')) {
