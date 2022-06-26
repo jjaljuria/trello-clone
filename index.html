@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Drag and Drop</title>
+	
+  <script type="module" crossorigin src="./assets/index.2529a89b.js"></script>
+  <link rel="stylesheet" href="./assets/index.ce8351d3.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1 class="title">
+			<input placeholder="Board Title..." maxlength="50" onblur="saveTitle(event)">
+		</h1>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+		<task-column></task-column>
+
+	</div>
+
+
+
+	<template id="templateTask">
+		<div class="task" draggable="true" data-id="">
+			<header class="task__header">
+				<div class="task__title">
+				</div>
+				<div class="task__icon">
+					<button class="task__icon-delete">x</button>
+				</div>
+			</header>
+			<hr>
+			<section class="task__body">
+
+			</section>
+
+		</div>
+	</template>
+
+	
+</body>
+
+</html>
