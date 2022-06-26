@@ -12,12 +12,13 @@ class Column extends HTMLElement {
 	constructor() {
 		super();
 		this.tasks = store.attach();
+		this.attachShadow({ mode: 'open' });
 		this.render();
 	}
 
 	newTask() {
 		const task = { title: '', body: '', id: getRandomIntInclusive(1, 100000000) };
-		const container = this.querySelector('.task__container task-separator');
+		const container = this.shadowRoot.querySelector('.task__container task-separator');
 
 		const el = this.#createTask(task);
 		const separator = this.#addSeparator();
@@ -111,11 +112,58 @@ class Column extends HTMLElement {
 		}
 	}
 
-	render() {
 
+	render() {
 		// el orden es importante
-		this.innerHTML = `
+		this.shadowRoot.innerHTML = `
+		<style>
+			.column {
+				background: rgb(250, 250, 250, 0.6);
+				border-radius: 5px;
+				overflow-y: auto;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.task__container {
+				height: 100%;
+				overflow-y: auto;
+			}
+
+
+			.new_task {
+				background-color: var(--color-primary);
+				padding: 1rem;
+				margin: 0.3rem;
+				border-radius: 5px;
+				font-size: 1.2rem;
+				font-weight: bold;
+				user-select: none;
+			}
+
+			.new_task:hover {
+				background-color: var(--color-secondary);
+				cursor: default;
+			}
+
+			@media (max-width: 360px) {
+				html {
+					font-size: 13px;
+				}
+
+				.container {
+					grid-template-rows: 2rem repeat(5, 80vh);
+				}
+
+				.column {
+					grid-column: 1/6;
+				}
+			}
+		</style>
 		<section class="column">
+			
 			<p class="new_task">
 				Create Task
 			</p>
@@ -123,8 +171,8 @@ class Column extends HTMLElement {
 			</div>
 		</section>`;
 
-		this.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
-		const taskContainer = this.querySelectorAll('.task__container');
+		this.shadowRoot.querySelector('.new_task').addEventListener('click', this.newTask.bind(this));
+		const taskContainer = this.shadowRoot.querySelectorAll('.task__container');
 		taskContainer.forEach(column => {
 			column.appendChild(this.#addSeparator());
 
@@ -154,7 +202,7 @@ class Column extends HTMLElement {
 
 		this.tasks.getAll().forEach(task => {
 
-			const container = this.querySelector('.task__container');
+			const container = this.shadowRoot.querySelector('.task__container');
 			const taskElement = this.#createTask(task);
 			const separator = this.#addSeparator(container);
 			container.appendChild(taskElement);

@@ -30,15 +30,7 @@ body {
 	gap: 1rem;
 }
 
-.column {
-	background: rgb(250, 250, 250, 0.6);
-	border-radius: 5px;
-	overflow-y: auto;
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-}
+
 
 .title {
 	grid-column: 1/6;
@@ -57,39 +49,4 @@ body {
 
 .title>input::placeholder {
 	color: var(--text-color);
-}
-
-.task__container {
-	height: 100%;
-	overflow-y: auto;
-}
-
-
-.new_task {
-	background-color: var(--color-primary);
-	padding: 1rem;
-	margin: 0.3rem;
-	border-radius: 5px;
-	font-size: 1.2rem;
-	font-weight: bold;
-	user-select: none;
-}
-
-.new_task:hover {
-	background-color: var(--color-secondary);
-	cursor: default;
-}
-
-@media (max-width: 360px) {
-	html {
-		font-size: 13px;
-	}
-
-	.container {
-		grid-template-rows: 2rem repeat(5, 80vh);
-	}
-
-	.column {
-		grid-column: 1/6;
-	}
 }

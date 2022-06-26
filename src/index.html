@@ -13,32 +13,15 @@
 		<h1 class="title">
 			<input placeholder="Board Title..." maxlength="50" onblur="saveTitle(event)">
 		</h1>
-		<task-column></task-column>
+		<task-column>
+
+		</task-column>
 		<task-column></task-column>
 		<task-column></task-column>
 		<task-column></task-column>
 		<task-column></task-column>
 
 	</div>
-
-
-
-	<template id="templateTask">
-		<div class="task" draggable="true" data-id="">
-			<header class="task__header">
-				<div class="task__title">
-				</div>
-				<div class="task__icon">
-					<button class="task__icon-delete">x</button>
-				</div>
-			</header>
-			<hr>
-			<section class="task__body">
-
-			</section>
-
-		</div>
-	</template>
 
 	<script src="/js/main.js" type="module"></script>
 </body>
