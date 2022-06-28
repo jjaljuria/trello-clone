@@ -1,96 +1,96 @@
 function editElement(event) {
-	const element = event.target;
-	element.contentEditable = true;
+  const element = event.target;
+  element.contentEditable = true;
 }
 
 export default class TaskItem extends HTMLElement {
+  #body = "adfs";
 
-	#body = 'adfs';
+  #title = "dsfgds";
 
-	#title = 'dsfgds';
+  constructor(props) {
+    super(props);
 
-	constructor(props) {
-		super(props);
+    this.attachShadow({ mode: "open" });
 
-		this.attachShadow({ mode: 'open' });
+    this.render();
 
-		this.render();
+    // handlers
+    this.titleElem.addEventListener("click", editElement);
+    this.titleElem.addEventListener("blur", (event) =>
+      this.saveText(event, "title")
+    );
+    this.bodyElem.addEventListener("blur", (event) =>
+      this.saveText(event, "body")
+    );
+    this.bodyElem.addEventListener("click", editElement);
+    this.deleteButton.addEventListener("click", this.deleteTask.bind(this));
+  }
 
-		// handlers
-		this.titleElem.addEventListener('click', editElement)
-		this.titleElem.addEventListener('blur', (event) => this.saveText(event, 'title'));
-		this.bodyElem.addEventListener('blur', (event) => this.saveText(event, 'body'));
-		this.bodyElem.addEventListener('click', editElement);
-		this.deleteButton.addEventListener('click', this.deleteTask.bind(this));
-	}
+  deleteTask() {
+    const newEvent = new CustomEvent("deleteTask", {
+      detail: {
+        id: this.id,
+      },
+    });
 
-	deleteTask() {
-		const newEvent = new CustomEvent('deleteTask', {
-			detail: {
-				id: this.id
-			}
-		});
+    this.dispatchEvent(newEvent);
+  }
 
-		this.dispatchEvent(newEvent);
-	}
+  saveText(event, attr) {
+    const newEvent = new CustomEvent("textChange", {
+      detail: {
+        id: this.dataset.id,
+        attr,
+        text: event.target.innerText,
+      },
+      composed: true,
+    });
 
-	saveText(event, attr) {
-		const newEvent = new CustomEvent('textChange', {
-			detail: {
-				id: this.dataset.id,
-				attr,
-				text: event.target.innerText
-			},
-			composed: true,
-		});
+    this[attr] = event.target.innerText;
+    event.target.contentEditable = false;
+    this.dispatchEvent(newEvent);
+  }
 
+  set body(value) {
+    this.#body = value;
+    this.setAttribute("body", value);
+  }
 
-		this[attr] = event.target.innerText;
-		event.target.contentEditable = false;
-		this.dispatchEvent(newEvent);
-	}
+  get body() {
+    return this.#body;
+  }
 
-	set body(value) {
-		this.#body = value;
-		this.setAttribute('body', value);
-	}
+  set title(value) {
+    this.#title = value;
+    this.setAttribute("title", value);
+  }
 
-	get body() {
-		return this.#body;
-	}
+  get title() {
+    return this.#title;
+  }
 
-	set title(value) {
-		this.#title = value;
-		this.setAttribute('title', value);
-	}
+  static get observedAttributes() {
+    return ["title", "body", "id"];
+  }
 
-	get title() {
-		return this.#title;
-	}
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case "title":
+        this.titleElem.innerText = newValue || "";
+        break;
+      case "body":
+        this.bodyElem.innerText = newValue || "";
+        break;
+      case "id":
+        this.dataset.id = newValue || "";
+        break;
+      default:
+    }
+  }
 
-	static get observedAttributes() {
-		return ['title', 'body', 'id']
-	}
-
-	attributeChangedCallback(name, oldValue, newValue) {
-
-		switch (name) {
-			case 'title':
-				this.titleElem.innerText = newValue || '';
-				break;
-			case 'body':
-				this.bodyElem.innerText = newValue || '';
-				break;
-			case 'id':
-				this.dataset.id = newValue || '';
-				break;
-			default:
-
-		}
-	}
-
-	render() {
-		this.shadowRoot.innerHTML = `
+  render() {
+    this.shadowRoot.innerHTML = `
 			${this.#styles()}
 			<div class="task" draggable="true" data-id="${this.dataset.id}">
 			<header class="task__header">
@@ -106,14 +106,13 @@ export default class TaskItem extends HTMLElement {
 		</div>
 		`;
 
+    this.titleElem = this.shadowRoot.querySelector(".task__title");
+    this.bodyElem = this.shadowRoot.querySelector(".task__body");
+    this.deleteButton = this.shadowRoot.querySelector(".task__icon-delete");
+  }
 
-		this.titleElem = this.shadowRoot.querySelector('.task__title');
-		this.bodyElem = this.shadowRoot.querySelector('.task__body');
-		this.deleteButton = this.shadowRoot.querySelector('.task__icon-delete');
-	}
-
-	#styles() {
-		return `
+  #styles() {
+    return `
 		<style>
 		.task {
 			display: block;
@@ -157,7 +156,7 @@ export default class TaskItem extends HTMLElement {
 		}
 		</style>
 		`;
-	}
+  }
 }
 
-customElements.define('task-item', TaskItem);
+customElements.define("task-item", TaskItem);

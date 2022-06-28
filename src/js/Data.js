@@ -1,91 +1,87 @@
 export default class Data {
-	#data = [];
+  #data = [];
 
-	#dataStore = null;
+  #dataStore = null;
 
-	constructor(dataStore) {
-		this.#dataStore = dataStore;
-	}
+  constructor(dataStore) {
+    this.#dataStore = dataStore;
+  }
 
-	/**
-	 * @param {Iterable<readonly [any, any]>} data
-	 */
-	set data(data) {
-		if (!Array.isArray(data))
-			throw new Error('typeError: Data need array');
+  /**
+   * @param {Iterable<readonly [any, any]>} data
+   */
+  set data(data) {
+    if (!Array.isArray(data)) throw new Error("typeError: Data need array");
 
-		const newData = [];
-		data.forEach(task => newData.push(task));
+    const newData = [];
+    data.forEach((task) => newData.push(task));
 
-		this.#data = newData;
-	}
+    this.#data = newData;
+  }
 
-	add(task) {
-		this.#data.push({ ...task });
-	}
+  add(task) {
+    this.#data.push({ ...task });
+  }
 
-	find(id) {
-		if (!id)
-			return null;
+  find(id) {
+    if (!id) return null;
 
-		return this.#data.find(task => task.id === id);
-	}
+    return this.#data.find((task) => task.id === id);
+  }
 
-	getAll() {
-		return [...this.#data];
-	}
+  getAll() {
+    return [...this.#data];
+  }
 
-	/**
-	 * 
-	 * @param {string} id id of the task have find
-	 * @return number position index of tasks or -1 if not find
-	 */
-	indexOf(id) {
-		return this.#data.findIndex(task => task.id === id);
-	}
+  /**
+   *
+   * @param {string} id id of the task have find
+   * @return number position index of tasks or -1 if not find
+   */
+  indexOf(id) {
+    return this.#data.findIndex((task) => task.id === id);
+  }
 
-	/**
-	 * @param {number} index index of task before insert new task
-	 * @param {task} task task for insert
-	 * @return true if element was inserted false otherway
-	 */
-	insert(index, task) {
-		try {
+  /**
+   * @param {number} index index of task before insert new task
+   * @param {task} task task for insert
+   * @return true if element was inserted false otherway
+   */
+  insert(index, task) {
+    try {
+      this.#data.splice(index, 0, task);
+    } catch (err) {
+      return false;
+    }
 
-			this.#data.splice(index, 0, task);
-		} catch (err) {
+    return true;
+  }
 
-			return false;
-		}
+  remove(id) {
+    const taskWillRemove = this.#data.findIndex((task) => task.id === id);
+    if (taskWillRemove === -1) {
+      return false;
+    }
 
-		return true;
-	}
+    this.#data.splice(taskWillRemove, 1);
+    return true;
+  }
 
-	remove(id) {
-		const taskWillRemove = this.#data.findIndex(task => task.id === id);
-		if (taskWillRemove === -1) {
-			return false;
-		}
+  removeDeleted() {
+    this.#data = this.#data.filter((item) => !item.deleted);
+  }
 
-		this.#data.splice(taskWillRemove, 1);
-		return true;
-	}
+  update(task) {
+    const taskIndex = this.#data.findIndex((item) => item.id === task.id);
+    if (taskIndex !== -1) {
+      this.#data[taskIndex] = task;
+      return true;
+    }
 
-	removeDeleted() {
-		this.#data = this.#data.filter(item => !item.deleted);
-	}
+    return false;
+  }
 
-	update(task) {
-		const taskIndex = this.#data.findIndex(item => item.id === task.id);
-		if (taskIndex !== -1) {
-			this.#data[taskIndex] = task;
-			return true;
-		}
-
-		return false;
-	}
-
-	save() {
-		this.#dataStore.save();
-	}
+  save() {
+    this.#dataStore.save();
+  }
 }

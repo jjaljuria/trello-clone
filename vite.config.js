@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 
 export default defineConfig({
-	root: './src',
-	base: './',
-	publicDir: 'public',
-	build: {
-		outDir: '../dist',
-		base: '/trello-clone/'
-	}
-})
+  root: "./src",
+  base: "./",
+  publicDir: "public",
+  build: {
+    outDir: "../dist",
+    base: "/trello-clone/",
+  },
+});
