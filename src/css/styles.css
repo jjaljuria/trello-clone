@@ -1,52 +1,50 @@
 * {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 :root {
-	--color-primary: rgba(255, 255, 255, 0.8);
-	--color-secondary: rgb(250, 250, 250, 0.6);
-	--font: Verdana, Geneva, Tahoma, sans-serif;
-	--text-color: #222;
+  --color-primary: rgba(255, 255, 255, 0.8);
+  --color-secondary: rgb(250, 250, 250, 0.6);
+  --font: Verdana, Geneva, Tahoma, sans-serif;
+  --text-color: #222;
 }
 
 html {
-	font-size: 16px;
-	font-family: var(--font);
-	color: var(--text-color);
+  font-size: 16px;
+  font-family: var(--font);
+  color: var(--text-color);
 }
 
 body {
-	background: linear-gradient(to right, #c0392b, #8e44ad);
+  background: linear-gradient(to right, #c0392b, #8e44ad);
 }
 
 .container {
-	margin: 1rem;
-	max-height: 1200px;
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	grid-template-rows: 3.5rem 80vh;
-	gap: 1rem;
+  margin: 1rem;
+  max-height: 1200px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 3.5rem 80vh;
+  gap: 1rem;
 }
-
-
 
 .title {
-	grid-column: 1/6;
-	padding: .3rem;
-	background: var(--color-secondary);
-	border-radius: 5px;
+  grid-column: 1/6;
+  padding: 0.3rem;
+  background: var(--color-secondary);
+  border-radius: 5px;
 }
 
-.title>input {
-	outline: none;
-	background: transparent;
-	font-size: 2rem;
-	border: 0;
-	width: 100%;
+.title > input {
+  outline: none;
+  background: transparent;
+  font-size: 2rem;
+  border: 0;
+  width: 100%;
 }
 
-.title>input::placeholder {
-	color: var(--text-color);
+.title > input::placeholder {
+  color: var(--text-color);
 }
