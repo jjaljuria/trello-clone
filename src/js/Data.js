@@ -1,6 +1,8 @@
 export default class Data {
   #data = [];
 
+  #title = "";
+
   #dataStore = null;
 
   constructor(dataStore) {
@@ -71,6 +73,22 @@ export default class Data {
     this.#data = this.#data.filter((item) => !item.deleted);
   }
 
+  set title(newTitle) {
+    if (typeof newTitle === "string") this.#title = newTitle;
+  }
+
+  get title() {
+    return this.#title;
+  }
+
+  save() {
+    this.#dataStore.save();
+  }
+
+  saveTitle() {
+    this.#dataStore.saveTitle();
+  }
+
   update(task) {
     const taskIndex = this.#data.findIndex((item) => item.id === task.id);
     if (taskIndex !== -1) {
@@ -79,9 +97,5 @@ export default class Data {
     }
 
     return false;
-  }
-
-  save() {
-    this.#dataStore.save();
   }
 }

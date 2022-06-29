@@ -102,6 +102,11 @@ class Column extends HTMLElement {
     this.tasks.save();
   }
 
+  #saveTitle(event) {
+    this.tasks.title = event.target.value;
+    this.tasks.saveTitle();
+  }
+
   dragTask(event) {
     const { dataTransfer, target } = event;
 
@@ -130,7 +135,70 @@ class Column extends HTMLElement {
   render() {
     // el orden es importante
     this.shadowRoot.innerHTML = `
-		<style>
+		${this.styles()}
+		
+		<section class="column">
+			<input class="title" placeholder="title" value="${
+        this.tasks.title
+      }" maxlenght="20">
+			<p class="new_task">
+				Add Task <i class="fa fa-plus"></i>
+			</p>
+			<div class="task__container">
+			</div>
+		</section>`;
+
+    const linkFontAwesome = document.createElement("link");
+    linkFontAwesome.setAttribute("rel", "stylesheet");
+    linkFontAwesome.setAttribute("href", "/css/all.css");
+    this.shadowRoot.appendChild(linkFontAwesome);
+
+    this.shadowRoot
+      .querySelector(".title")
+      .addEventListener("blur", this.#saveTitle.bind(this));
+
+    this.shadowRoot
+      .querySelector(".new_task")
+      .addEventListener("click", this.newTask.bind(this));
+
+    const taskContainer = this.shadowRoot.querySelectorAll(".task__container");
+
+    taskContainer.forEach((column) => {
+      column.appendChild(this.#addSeparator());
+
+      column.addEventListener("dragover", (event) => {
+        if (event.target.classList.contains("task__container")) {
+          event.preventDefault();
+        }
+      }); // evita que se suelte sobre una task
+
+      column.addEventListener("drop", (event) => {
+        if (event.dataTransfer.effectAllowed === "move") {
+          const task = JSON.parse(event.dataTransfer.getData("text"));
+
+          const taskElement = this.#createTask(task, column);
+          const separator = this.#addSeparator();
+          column.appendChild(taskElement);
+          column.appendChild(separator);
+
+          this.tasks.add(task);
+          this.tasks.save();
+        }
+      });
+    });
+
+    this.tasks.getAll().forEach((task) => {
+      const container = this.shadowRoot.querySelector(".task__container");
+      const taskElement = this.#createTask(task);
+      const separator = this.#addSeparator(container);
+      container.appendChild(taskElement);
+      container.appendChild(separator);
+    });
+  }
+
+  styles() {
+    return `
+    <style>
 			.column {
 				background: rgb(250, 250, 250, 0.6);
 				border-radius: 5px;
@@ -178,67 +246,22 @@ class Column extends HTMLElement {
 
 			.title{
 				padding: 0.5rem;
+        margin: 0.3rem;
 				margin-bottom: .2rem;
 				outline: none;
 				border:0;
 				font-size: 1rem;
 				background: transparent;
 				font-weight: bold;
+        
 			}
+
+      .title:focus{
+        background: inherit;
+        outline: inherit;
+      }
 			
-		</style>
-		
-		<section class="column">
-			<input class="title" placeholder="title" value="${this.title}" maxlenght="20">
-			<p class="new_task">
-				Add Task <i class="fa fa-plus"></i>
-			</p>
-			<div class="task__container">
-			</div>
-		</section>`;
-
-    const linkFontAwesome = document.createElement("link");
-    linkFontAwesome.setAttribute("rel", "stylesheet");
-    linkFontAwesome.setAttribute("href", "/css/all.css");
-    this.shadowRoot.appendChild(linkFontAwesome);
-
-    this.shadowRoot
-      .querySelector(".new_task")
-      .addEventListener("click", this.newTask.bind(this));
-
-    const taskContainer = this.shadowRoot.querySelectorAll(".task__container");
-
-    taskContainer.forEach((column) => {
-      column.appendChild(this.#addSeparator());
-
-      column.addEventListener("dragover", (event) => {
-        if (event.target.classList.contains("task__container")) {
-          event.preventDefault();
-        }
-      }); // evita que se suelte sobre una task
-
-      column.addEventListener("drop", (event) => {
-        if (event.dataTransfer.effectAllowed === "move") {
-          const task = JSON.parse(event.dataTransfer.getData("text"));
-
-          const taskElement = this.#createTask(task, column);
-          const separator = this.#addSeparator();
-          column.appendChild(taskElement);
-          column.appendChild(separator);
-
-          this.tasks.add(task);
-          this.tasks.save();
-        }
-      });
-    });
-
-    this.tasks.getAll().forEach((task) => {
-      const container = this.shadowRoot.querySelector(".task__container");
-      const taskElement = this.#createTask(task);
-      const separator = this.#addSeparator(container);
-      container.appendChild(taskElement);
-      container.appendChild(separator);
-    });
+		</style>`;
   }
 }
 

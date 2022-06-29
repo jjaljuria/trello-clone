@@ -17,6 +17,7 @@ function getTitle() {
 
   return JSON.parse(title);
 }
+
 window.addEventListener("DOMContentLoaded", () => {
   store.populate();
   document.querySelectorAll("task-column").forEach((column) => column.render());
