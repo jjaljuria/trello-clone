@@ -48,3 +48,24 @@ body {
 .title > input::placeholder {
   color: var(--text-color);
 }
+
+.add-column {
+  display: flex;
+  align-items: flex-start;
+  user-select: none;
+  height: fit-content;
+}
+
+.add-column__button {
+  background-color: var(--color-secondary);
+  padding: .5rem;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.form-create-column{
+  background-color: var(--color-secondary);
+  padding: .5rem;
+  border-radius: 5px;
+  width: 100%;
+}
