@@ -203,7 +203,7 @@ class Column extends HTMLElement {
 				background: rgb(250, 250, 250, 0.6);
 				border-radius: 5px;
 				overflow-y: auto;
-				height: 100%;
+				max-height: 80vh;
 				width: 100%;
 				display: flex;
 				flex-direction: column;

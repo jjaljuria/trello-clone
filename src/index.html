@@ -9,16 +9,18 @@
   </head>
 
   <body>
+    <header class="title">
+      <input
+        placeholder="Board Title..."
+        maxlength="50"
+        onblur="saveTitle(event)"
+      />
+    </header>
+
     <div class="container">
-      <h1 class="title">
-        <input
-          placeholder="Board Title..."
-          maxlength="50"
-          onblur="saveTitle(event)"
-        />
-      </h1>
-      <div class="add-column"><a class="add-column__button">Add Column <i class="fa fa-plus"></i></a></div>
-      
+      <div class="add-column">
+        <a class="add-column__button">Add Column <i class="fa fa-plus"></i></a>
+      </div>
     </div>
 
     <script src="/js/main.js" type="module"></script>

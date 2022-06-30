@@ -24,14 +24,14 @@ body {
 .container {
   margin: 1rem;
   max-height: 1200px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 3.5rem 80vh;
+  display: flex;
+  align-items: flex-start;
   gap: 1rem;
+  max-height: 80vh;
 }
 
 .title {
-  grid-column: 1/6;
+  margin: 1rem;
   padding: 0.3rem;
   background: var(--color-secondary);
   border-radius: 5px;
@@ -58,14 +58,14 @@ body {
 
 .add-column__button {
   background-color: var(--color-secondary);
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 5px;
   width: 100%;
 }
 
-.form-create-column{
+.form-create-column {
   background-color: var(--color-secondary);
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 5px;
   width: 100%;
 }
