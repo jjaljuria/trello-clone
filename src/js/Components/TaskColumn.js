@@ -1,4 +1,5 @@
 import { store } from "../store";
+import List from '../List';
 import TaskItem from "./TaskItem";
 
 function getRandomIntInclusive(min, max) {
@@ -10,11 +11,11 @@ function getRandomIntInclusive(min, max) {
 }
 
 class Column extends HTMLElement {
-  title = "";
+
+  list = null;
 
   constructor() {
     super();
-    this.tasks = store.attach();
     this.attachShadow({ mode: "open" });
     this.render();
   }
@@ -34,8 +35,8 @@ class Column extends HTMLElement {
 
     container.insertAdjacentElement("afterend", el);
     el.after(separator);
-    this.tasks.insert(0, task);
-    this.tasks.save();
+    this.list.insert(0, task);
+    store.save();
   }
 
   #createTask({ id, title, body }) {
@@ -76,35 +77,34 @@ class Column extends HTMLElement {
       taskElement.insertAdjacentElement("afterend", separatorTask);
       const previousIdTask = event.target.previousElementSibling?.id;
       if (!previousIdTask) {
-        this.tasks.insert(0, task);
+        this.list.insert(0, task);
       } else {
-        const indexOfPreviousTask = this.tasks.indexOf(previousIdTask);
-        this.tasks.insert(indexOfPreviousTask + 1, task);
+        const indexOfPreviousTask = this.list.indexOf(previousIdTask);
+        this.list.insert(indexOfPreviousTask + 1, task);
       }
 
-      this.tasks.save();
+      store.save();
     });
 
     return separator;
   }
 
   #deleteTask(id) {
-    this.tasks.remove(id);
-    this.tasks.save();
+    this.list.remove(id);
+    store.save();
     this.render();
   }
 
   #saveTextChange(event) {
     const { id, text, attr } = event.detail;
-    const task = this.tasks.find(id);
+    const task = this.list.find(id);
     task[attr] = text;
-    this.tasks.update(task);
-    this.tasks.save();
+    this.list.update(task);
+    store.save();
   }
 
   #saveTitle(event) {
-    this.tasks.title = event.target.value;
-    this.tasks.saveTitle();
+    this.list.name = event.target.value;
   }
 
   dragTask(event) {
@@ -120,26 +120,27 @@ class Column extends HTMLElement {
     dataTransfer.setData("text", JSON.stringify(task));
 
     task.deleted = true;
-    this.tasks.update(task);
+    this.list.update(task);
   }
 
   // remove task when task were droped exitily
   removeTaskDroped(event) {
     if (event.dataTransfer.dropEffect !== "none") {
-      this.tasks.removeDeleted();
-      this.tasks.save();
+      this.list.removeDeleted();
+      store.save();
       this.render();
     }
   }
 
   render() {
     // el orden es importante
+   
     this.shadowRoot.innerHTML = `
 		${this.styles()}
 		
 		<section class="column">
 			<input class="title" placeholder="title" value="${
-        this.tasks.title
+        this.list?.name || ''
       }" maxlenght="20">
 			<p class="new_task">
 				Add Task <i class="fa fa-plus"></i>
@@ -181,13 +182,15 @@ class Column extends HTMLElement {
           column.appendChild(taskElement);
           column.appendChild(separator);
 
-          this.tasks.add(task);
-          this.tasks.save();
+          this.list.add(task);
+          store.save();
         }
       });
     });
 
-    this.tasks.getAll().forEach((task) => {
+    if(!this.list)return;
+
+    this.list.getAll().forEach((task) => {
       const container = this.shadowRoot.querySelector(".task__container");
       const taskElement = this.#createTask(task);
       const separator = this.#addSeparator(container);

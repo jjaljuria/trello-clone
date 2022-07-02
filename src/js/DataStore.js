@@ -1,7 +1,7 @@
-import Data from "./Data";
+import List from "./List";
 
 export default class DataStore {
-  #data = [];
+  #lists = [];
 
   #store = null;
 
@@ -11,38 +11,27 @@ export default class DataStore {
     this.#store = store;
   }
 
-  attach() {
-    const newData = new Data(this);
-    this.#data[this.length] = newData;
-    this.length += 1;
-
-    return newData;
+  attach(list){
+    this.#lists.push(list);
   }
 
+  getLists() {
+    const lists = DataStore.ListsJSONtoLists(this.#store.getItem("lists"));
+    return lists;
+  }
+  
+  static ListsJSONtoLists(ListJSON) {
+    if (!ListJSON) return [];
+
+    const listsRaw = JSON.parse(ListJSON);
+
+    if (!Array.isArray(listsRaw)) return [];
+
+    return listsRaw.map(listRaw => List.create(listRaw));
+  }
+  
   save() {
-    const data = this.#data.map((item) => item.getAll());
-
-    this.#store.setItem("data", JSON.stringify(data));
-  }
-
-  saveTitle() {
-    const titles = this.#data.map((item) => item.title);
-
-    this.#store.setItem("columns", JSON.stringify(titles));
-  }
-
-  populate() {
-    const data = JSON.parse(this.#store.getItem("data"));
-    const titles = JSON.parse(this.#store.getItem("columns"));
-
-   
-    if (!Array.isArray(data) || !Array.isArray(titles)) return;
-    titles.forEach((title,i) => {this.#data[i].title = title});
-
-    for (let i = 0; i < data.length; i += 1) {
-      for (let j = 0; j < data[i].length; j += 1) {
-        this.#data[i].add(data[i][j]);
-      }
-    }
+    const listsObject = this.#lists.map(list => list.toObject());
+    this.#store.setItem("lists", JSON.stringify(listsObject));
   }
 }
