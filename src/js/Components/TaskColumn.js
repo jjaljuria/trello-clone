@@ -1,5 +1,5 @@
 import { store } from "../store";
-import List from '../List';
+import List from "../List";
 import TaskItem from "./TaskItem";
 
 function getRandomIntInclusive(min, max) {
@@ -11,7 +11,6 @@ function getRandomIntInclusive(min, max) {
 }
 
 class Column extends HTMLElement {
-
   list = null;
 
   constructor() {
@@ -134,14 +133,17 @@ class Column extends HTMLElement {
 
   render() {
     // el orden es importante
-   
+
     this.shadowRoot.innerHTML = `
 		${this.styles()}
 		
 		<section class="column">
-			<input class="title" placeholder="title" value="${
-        this.list?.name || ''
-      }" maxlenght="20">
+      <div class="column__title__group">
+        <input class="column__title" placeholder="title" value="${
+          this.list?.name || ""
+        }" maxlenght="20">
+        <button class="btn btn-danger m-1"><i class="fas fa-times"></i></button>
+      </div>
 			<p class="new_task">
 				Add Task <i class="fa fa-plus"></i>
 			</p>
@@ -149,19 +151,42 @@ class Column extends HTMLElement {
 			</div>
 		</section>`;
 
-    const linkFontAwesome = document.createElement("link");
-    linkFontAwesome.setAttribute("rel", "stylesheet");
-    linkFontAwesome.setAttribute("href", "/css/all.css");
-    this.shadowRoot.appendChild(linkFontAwesome);
+    this.addHandlers();
+
+    this.shadowRoot.appendChild(Column.createLink("/css/styles.css"));
+
+    this.addTaskInStock();
+  }
+
+  /**
+   *
+   * @param {string} url direcction url of the file css
+   * @return Element link generated
+   */
+  static createLink(url) {
+    const link = document.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("href", url);
+    return link;
+  }
+
+  addHandlers() {
+    this.shadowRoot
+      .querySelector(".column__title")
+      .addEventListener("blur", this.#saveTitle.bind(this));
 
     this.shadowRoot
-      .querySelector(".title")
-      .addEventListener("blur", this.#saveTitle.bind(this));
+      .querySelector(".column__title__group > .btn")
+      .addEventListener("click", () => {
+        store.remove(this.list.id);
+        this.remove();
+      });
 
     this.shadowRoot
       .querySelector(".new_task")
       .addEventListener("click", this.newTask.bind(this));
 
+    // drag and drop handlers
     const taskContainer = this.shadowRoot.querySelectorAll(".task__container");
 
     taskContainer.forEach((column) => {
@@ -187,8 +212,10 @@ class Column extends HTMLElement {
         }
       });
     });
+  }
 
-    if(!this.list)return;
+  addTaskInStock() {
+    if (!this.list) return;
 
     this.list.getAll().forEach((task) => {
       const container = this.shadowRoot.querySelector(".task__container");
@@ -199,6 +226,7 @@ class Column extends HTMLElement {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   styles() {
     return `
     <style>
@@ -207,7 +235,7 @@ class Column extends HTMLElement {
 				border-radius: 5px;
 				overflow-y: auto;
 				max-height: 80vh;
-				width: 100%;
+				width: 15rem;
 				display: flex;
 				flex-direction: column;
 			}
@@ -247,7 +275,7 @@ class Column extends HTMLElement {
 				}
 			}
 
-			.title{
+			.column__title{
 				padding: 0.5rem;
         margin: 0.3rem;
 				margin-bottom: .2rem;
@@ -256,12 +284,18 @@ class Column extends HTMLElement {
 				font-size: 1rem;
 				background: transparent;
 				font-weight: bold;
+        width: 100%;
         
 			}
 
-      .title:focus{
+      .column__title:focus{
         background: inherit;
         outline: inherit;
+      }
+
+      .column__title__group{
+        display: flex;
+        align-items: center;
       }
 			
 		</style>`;

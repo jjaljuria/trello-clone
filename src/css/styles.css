@@ -1,8 +1,5 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+@import url('normalize.css');
+@import url('all.css');
 
 :root {
   --color-primary: rgba(255, 255, 255, 0.8);
@@ -68,4 +65,25 @@ body {
   padding: 0.5rem;
   border-radius: 5px;
   width: 100%;
+}
+
+.btn{
+  background: transparent;
+  border: 0;
+}
+
+.btn:hover{
+  background: var(--color-secondary);
+}
+
+.btn:active{
+  box-shadow: 0 0 0px 1px;
+}
+
+.btn-danger{
+
+}
+
+.m-1{
+  margin: .3rem;
 }

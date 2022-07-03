@@ -1,4 +1,5 @@
 dist
 package-lock.json
 src/css/all.css
+src/css/normalize.css
 src/public

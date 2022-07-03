@@ -29,6 +29,11 @@ export default class DataStore {
 
     return listsRaw.map(listRaw => List.create(listRaw));
   }
+
+  remove(id){
+    this.#lists = this.#lists.filter(list => list.id !== id);
+    this.save();
+  }
   
   save() {
     const listsObject = this.#lists.map(list => list.toObject());
