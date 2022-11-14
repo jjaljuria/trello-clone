@@ -153,7 +153,7 @@ class Column extends HTMLElement {
 
     this.addHandlers();
 
-    this.shadowRoot.appendChild(Column.createLink("/css/styles.css"));
+    this.shadowRoot.appendChild(Column.createLink("/styles.css"));
 
     this.addTaskInStock();
   }
