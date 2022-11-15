@@ -22,7 +22,7 @@ function getTitle() {
 function createColumn(event) {
   event.preventDefault();
   event.stopPropagation();
-  const column = event.target.parentNode;
+  const column = document.querySelector('.add-column')
 
   column.innerHTML = `
   <form class="form-create-column">
