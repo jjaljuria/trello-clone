@@ -15,7 +15,7 @@ export default class List {
 
   /**
    *
-   * @param {id} string 
+   * @param {id} string
    * @param {name} string
    * @param {tasks} Array tasks
    */
@@ -27,11 +27,7 @@ export default class List {
     this.tasks.push({ ...task });
   }
 
-  static create({
-    id,
-    name,
-    tasks,
-  }){
+  static create({ id, name, tasks }) {
     const newList = new List();
     newList.id = id;
     newList.name = name;

@@ -16,11 +16,11 @@ html {
 
 body {
   background: linear-gradient(to right, #c0392b, #8e44ad);
+  background-attachment: fixed;
 }
 
 .container {
   margin: 1rem;
-  max-height: 1200px;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
