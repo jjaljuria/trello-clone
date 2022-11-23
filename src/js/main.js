@@ -13,7 +13,7 @@ function saveTitle(event) {
 }
 
 function getTitle() {
-  const title = localStorage.getItem("title");
+  const title = JSON.parse(localStorage.getItem("title"));
   if (!title) return "";
 
   return title;
